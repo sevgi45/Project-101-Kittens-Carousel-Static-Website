@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+This template enables eine web-server application on the development environment. 
+  
+Parameters:
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'  
+  
+Resources:
+  KittenInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t2.micro
+      KeyName: firstkey
+      SecurityGroups: 
+        - !Ref KittenSecGroup
+      Tags: 
+        Tags
+      UserData: 
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update -y 
+          yum install httpd -y 
+          systemctl start httpd 
+          systemctl enable httpd 
+          wget 
+          
+
+
+
+
+  KittenSecGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      SecurityGroupIngress: 
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0  
+      Tags: 
+        Tags
+  
+  
+
+  
+Outputs:
